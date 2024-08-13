@@ -6,7 +6,7 @@
 <body>
 
 <h2>Select User</h2>
-<form action="#" th:action="@{/users/{id}(id=${selectedUser?.id})}" method="get">
+<form action="#" th:action="@{/users/Id{id}(id=${selectedUser?.id})}" method="get">
     <label for="userSelect">Select User ID:</label>
     <select id="userSelect" name="id" th:onchange="this.form.submit()">
         <option value="" disabled selected>Select a user</option>

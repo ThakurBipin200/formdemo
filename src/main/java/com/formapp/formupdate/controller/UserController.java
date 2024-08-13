@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public String getUserDetails(@PathVariable("id") Long id, Model model) {
+    public String getUserDetails(@RequestParam("id") Long id, Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
 
