@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Form</title>
+</head>
+<body>
+
+<h2>Select User</h2>
+<form action="#" th:action="@{/users/{id}(id=${selectedUser?.id})}" method="get">
+    <label for="userSelect">Select User ID:</label>
+    <select id="userSelect" name="id" th:onchange="this.form.submit()">
+        <option value="" disabled selected>Select a user</option>
+        <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.id}"></option>
+    </select>
+</form>
+
+<div th:if="${selectedUser != null}">
+    <h3>User Details</h3>
+    <form th:action="@{/users/update}" th:object="${selectedUser}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="name">Name: </label>
+        <input type="text" id="name" th:field="*{name}" /><br>
+
+        <label for="email">Email: </label>
+        <input type="email" id="email" th:field="*{email}" /><br>
+
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+</body>
+</html>
