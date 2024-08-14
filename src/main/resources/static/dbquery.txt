@@ -1,0 +1,155 @@
+{
+    "siteName": "sampleSite",
+    "headerVhost": "www.sample.com",
+    "siteProdDomain": "prod.sample.com",
+    "siteNonProdDomain": "nonprod.sample.com",
+    "aemSitePathEN": "/content/sample/en",
+    "statFilesLevel": "Level 2",
+    "damTransformPath": [
+        "/content/dam/sample/path1",
+        "/content/dam/sample/path2"
+    ],
+    "stateSpecificPage": "sample-specific-page",
+    "siteMapFeedSelector": "sample-feed-selector",
+    "languages": [
+        "fr",
+        "de"
+    ],
+    "commonCacheCheck": "N",
+    "commonCachePath": [
+        "/content/cache/sample/path1",
+        "/content/cache/sample/path2"
+    ],
+    "commonDropdown": [
+        "Sample Option 1",
+        "Sample Option 2"
+    ],
+    "siteSpCacheCheck": "Y",
+    "siteSpCachePath": [
+        "/content/cache/sample_sp/path1",
+        "/content/cache/sample_sp/path2"
+    ],
+    "siteSpDropdown": [
+        "Special Sample Option 1",
+        "Special Sample Option 2"
+    ]
+}
+
+
+json
+
+
+
+SQL
+
+-- Insert into site_config table
+INSERT INTO site_config (
+    site_name,
+    header_vhost,
+    site_prod_domain,
+    site_non_prod_domain,
+    aem_site_path_en,
+    stat_files_level,
+    state_specific_page,
+    site_map_feed_selector,
+    common_cache_check,
+    site_sp_cache_check
+) VALUES (
+    'sampleSite',              -- site_name
+    'www.sample.com',          -- header_vhost
+    'prod.sample.com',         -- site_prod_domain
+    'nonprod.sample.com',      -- site_non_prod_domain
+    '/content/sample/en',      -- aem_site_path_en
+    'Level 2',                 -- stat_files_level
+    'sample-specific-page',    -- state_specific_page
+    'sample-feed-selector',    -- site_map_feed_selector
+    'N',                       -- common_cache_check
+    'Y'                        -- site_sp_cache_check
+);
+
+-- Insert into dam_transform_path table
+INSERT INTO dam_transform_path (site_name, path) VALUES
+('sampleSite', '/content/dam/sample/path1'),
+('sampleSite', '/content/dam/sample/path2');
+
+-- Insert into languages table
+INSERT INTO languages (site_name, language) VALUES
+('sampleSite', 'fr'),
+('sampleSite', 'de');
+
+-- Insert into common_cache_path table
+INSERT INTO common_cache_path (site_name, path) VALUES
+('sampleSite', '/content/cache/sample/path1'),
+('sampleSite', '/content/cache/sample/path2');
+
+-- Insert into common_dropdown table
+INSERT INTO common_dropdown (site_name, dropdown) VALUES
+('sampleSite', 'Sample Option 1'),
+('sampleSite', 'Sample Option 2');
+
+-- Insert into site_sp_cache_path table
+INSERT INTO site_sp_cache_path (site_name, path) VALUES
+('sampleSite', '/content/cache/sample_sp/path1'),
+('sampleSite', '/content/cache/sample_sp/path2');
+
+-- Insert into site_sp_dropdown table
+INSERT INTO site_sp_dropdown (site_name, dropdown) VALUES
+('sampleSite', 'Special Sample Option 1'),
+('sampleSite', 'Special Sample Option 2');
+
+
+
+-- Insert into site_config table
+INSERT INTO site_config (
+    site_name,
+    header_vhost,
+    site_prod_domain,
+    site_non_prod_domain,
+    aem_site_path_en,
+    stat_files_level,
+    state_specific_page,
+    site_map_feed_selector,
+    common_cache_check,
+    site_sp_cache_check
+) VALUES (
+    'exampleSite',             -- site_name
+    'www.example.com',         -- header_vhost
+    'prod.example.com',        -- site_prod_domain
+    'nonprod.example.com',     -- site_non_prod_domain
+    '/content/example/en',     -- aem_site_path_en
+    'Level 1',                 -- stat_files_level
+    'state-specific-page',     -- state_specific_page
+    'feed-selector',           -- site_map_feed_selector
+    'Y',                       -- common_cache_check
+    'N'                        -- site_sp_cache_check
+);
+
+-- Insert into dam_transform_path table
+INSERT INTO dam_transform_path (site_name, path) VALUES
+('exampleSite', '/content/dam/example/path1'),
+('exampleSite', '/content/dam/example/path2');
+
+-- Insert into languages table
+INSERT INTO languages (site_name, language) VALUES
+('exampleSite', 'en'),
+('exampleSite', 'es');
+
+-- Insert into common_cache_path table
+INSERT INTO common_cache_path (site_name, path) VALUES
+('exampleSite', '/content/cache/common/path1'),
+('exampleSite', '/content/cache/common/path2');
+
+-- Insert into common_dropdown table
+INSERT INTO common_dropdown (site_name, dropdown) VALUES
+('exampleSite', 'Option 1'),
+('exampleSite', 'Option 2');
+
+-- Insert into site_sp_cache_path table
+INSERT INTO site_sp_cache_path (site_name, path) VALUES
+('exampleSite', '/content/cache/sp/path1'),
+('exampleSite', '/content/cache/sp/path2');
+
+-- Insert into site_sp_dropdown table
+INSERT INTO site_sp_dropdown (site_name, dropdown) VALUES
+('exampleSite', 'Special Option 1'),
+('exampleSite', 'Special Option 2');
