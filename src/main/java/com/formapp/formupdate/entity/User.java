@@ -1,6 +1,9 @@
 package com.formapp.formupdate.entity;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "pap_users")
 public class User {
@@ -34,6 +37,17 @@ public class User {
 
     private String name;
     private String email;
+
+    public List<String> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<String> subjects) {
+        this.subjects = subjects;
+    }
+
+    @ElementCollection
+    private List<String> subjects = new ArrayList<>();
 
     // Getters and Setters
 }

@@ -159,8 +159,8 @@ public class SiteConfigController {
         List<SiteConfig> siteConfigs = siteConfigService.findAll();
         model.addAttribute("siteConfigs", siteConfigs);
 
-        Optional<SiteConfig> siteConfig = siteConfigService.getSiteNameById(siteName);
-        siteConfig.ifPresent(sc -> model.addAttribute("selectedSiteConfig", sc));
+       // Optional<SiteConfig> siteConfig = siteConfigService.getSiteNameById(siteName);
+        siteConfigService.getSiteNameById(siteName).ifPresent(sc -> model.addAttribute("selectedSiteConfig", sc));
         return "siteConfigForm";
     }
 

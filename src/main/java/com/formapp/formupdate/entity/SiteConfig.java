@@ -7,9 +7,7 @@ import java.util.List;
 public class SiteConfig {
 
     @Id
-
-    @Column
-            (name = "site_name") // Custom column name
+    @Column(name = "site_name") // Custom column name
     private String siteName;
 
     @Column(name = "header_vhost")

@@ -153,3 +153,149 @@ INSERT INTO site_sp_cache_path (site_name, path) VALUES
 INSERT INTO site_sp_dropdown (site_name, dropdown) VALUES
 ('exampleSite', 'Special Option 1'),
 ('exampleSite', 'Special Option 2');
+
+
+
+
+//first html
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Site Config Form</title>
+</head>
+<body>
+
+<h2>Select Site</h2>
+<form action="#" th:action="@{/site-configs/site{siteName}(siteName=${selectedSiteConfig?.siteName})}" method="get">
+    <label for="siteSelect">Select Site Name:</label>
+    <select id="siteSelect" name="siteName" th:onchange="this.form.submit()">
+        <option value="" disabled selected>Select a site</option>
+        <option th:each="site : ${siteConfigs}" th:value="${site.siteName}" th:text="${site.siteName}" th:selected="${site.siteName == selectedSiteConfig?.siteName}"></option>
+    </select>
+</form>
+
+<div th:if="${selectedSiteConfig != null}">
+    <h3>Site Config Details</h3>
+    <form th:action="@{/site-configs/update}" th:object="${selectedSiteConfig}" method="post">
+        <input type="hidden" th:field="*{siteName}" />
+
+        <label for="headerVhost">Header VHost: </label>
+        <input type="text" id="headerVhost" th:field="*{headerVhost}" /><br>
+
+        <label for="siteProdDomain">Site Prod Domain: </label>
+        <input type="text" id="siteProdDomain" th:field="*{siteProdDomain}" /><br>
+
+        <label for="siteNonProdDomain">Site Non Prod Domain: </label>
+        <input type="text" id="siteNonProdDomain" th:field="*{siteNonProdDomain}" /><br>
+
+        <label for="aemSitePathEN">AEM Site Path EN: </label>
+        <input type="text" id="aemSitePathEN" th:field="*{aemSitePathEN}" /><br>
+
+        <label for="statFilesLevel">Stat Files Level: </label>
+        <input type="text" id="statFilesLevel" th:field="*{statFilesLevel}" /><br>
+
+        <!-- New Fields -->
+        <label for="stateSpecificPage">State Specific Page: </label>
+        <input type="checkbox" value="on" id="stateSpecificPage" th:field="*{stateSpecificPage}"  th:checked="*{stateSpecificPage}" /><br>
+
+        <label for="siteMapFeedSelector">Site Map Feed Selector: </label>
+        <input type="text" id="siteMapFeedSelector" th:field="*{siteMapFeedSelector}" /><br>
+
+
+        <!-- Multifield for DAM Transform Path -->
+        <div id="damTransformPathContainer">
+            <div th:each="path, iterStat : ${selectedSiteConfig.damTransformPath}">
+                <label th:for="'damTransformPath' + ${iterStat.index}">DAM Transform Path (#{iterStat.index + 1}): </label>
+                <input type="text" th:id="'damTransformPath' + ${iterStat.index}" th:field="*{damTransformPath[__${iterStat.index}__]}" /><br>
+            </div>
+        </div>
+        <button type="button" onclick="addField('damTransformPathContainer', 'damTransformPath')">Add DAM Transform Path</button><br>
+
+        <!-- Multifield for Languages -->
+        <div id="languagesContainer">
+            <div th:each="lang, iterStat : ${selectedSiteConfig.languages}">
+                <label th:for="'languages' + ${iterStat.index}">Language (#{iterStat.index + 1}): </label>
+                <input type="text" th:id="'languages' + ${iterStat.index}" th:field="*{languages[__${iterStat.index}__]}" /><br>
+            </div>
+        </div>
+        <button type="button" onclick="addField('languagesContainer', 'languages')">Add Language</button><br>
+
+        <!-- Conditional Fields Based on Cache Check -->
+        <label for="commonCacheCheck">Common Cache Check: </label>
+        <input type="checkbox" value="on" id="commonCacheCheck" th:field="*{commonCacheCheck}" th:checked="*{commonCacheCheck}" onclick="togglePanel(this,'commonCachePanel')" /><br>
+
+        <div id="commonCachePanel" style="display: none;">
+            <div id="commonCachePathContainer">
+                <div th:each="path, iterStat : ${selectedSiteConfig.commonCachePath}">
+                    <label th:for="'commonCachePath' + ${iterStat.index}">Common Cache Path (#{iterStat.index + 1}): </label>
+                    <input type="text" th:id="'commonCachePath' + ${iterStat.index}" th:field="*{commonCachePath[__${iterStat.index}__]}" /><br>
+                </div>
+            </div>
+            <button type="button" onclick="addField('commonCachePathContainer', 'commonCachePath')">Add Common Cache Path</button><br>
+
+            <div id="commonDropdownContainer">
+                <div th:each="dropdown, iterStat : ${selectedSiteConfig.commonDropdown}">
+                    <label th:for="'commonDropdown' + ${iterStat.index}">Common Dropdown (#{iterStat.index + 1}): </label>
+                    <input type="text" th:id="'commonDropdown' + ${iterStat.index}" th:field="*{commonDropdown[__${iterStat.index}__]}" /><br>
+                </div>
+            </div>
+            <button type="button" onclick="addField('commonDropdownContainer', 'commonDropdown')">Add Common Dropdown</button><br>
+        </div>
+
+        <!-- Site Specific Cache Check -->
+        <label for="siteSpCacheCheck">Site SP Cache Check: </label>
+        <input th:checked="*{siteSpCacheCheck}" type="checkbox" value="on" id="siteSpCacheCheck" th:field="*{siteSpCacheCheck}" onclick="togglePanel(this,'siteSpCachePanel')" /><br>
+
+        <div id="siteSpCachePanel" style="display: none;">
+            <div id="siteSpCachePathContainer">
+                <div th:each="path, iterStat : ${selectedSiteConfig.siteSpCachePath}">
+                    <label th:for="'siteSpCachePath' + ${iterStat.index}">Site SP Cache Path (#{iterStat.index + 1}): </label>
+                    <input type="text" th:id="'siteSpCachePath' + ${iterStat.index}" th:field="*{siteSpCachePath[__${iterStat.index}__]}" /><br>
+                </div>
+            </div>
+            <button type="button" onclick="addField('siteSpCachePathContainer', 'siteSpCachePath')">Add Site SP Cache Path</button><br>
+
+            <div id="siteSpDropdownContainer">
+                <div th:each="dropdown, iterStat : ${selectedSiteConfig.siteSpDropdown}">
+                    <label th:for="'siteSpDropdown' + ${iterStat.index}">Site SP Dropdown (#{iterStat.index + 1}): </label>
+                    <input type="text" th:id="'siteSpDropdown' + ${iterStat.index}" th:field="*{siteSpDropdown[__${iterStat.index}__]}" /><br>
+                </div>
+            </div>
+            <button type="button" onclick="addField('siteSpDropdownContainer', 'siteSpDropdown')">Add Site SP Dropdown</button><br>
+        </div>
+
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+<script>
+    function addField(containerId, fieldName) {
+        var container = document.getElementById(containerId);
+        var index = container.children.length;
+        var newField = document.createElement('div');
+        newField.innerHTML = '<label for="' + fieldName + index + '">' + fieldName + ' (' + (index + 1) + '): </label>' +
+            '<input type="text" id="' + fieldName + index + '" name="' + fieldName + '[' + index + ']" /><br>';
+        container.appendChild(newField);
+    }
+
+    // function togglePanel(panelId) {
+    //     var panel = document.getElementById(panelId);
+    //     if (panel) {
+    //         panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    //     }
+    // }
+    function togglePanel(checkbox, panelId) {
+        var panel = document.getElementById(panelId);
+        if (checkbox.checked) {
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -25,9 +25,29 @@
         <label for="email">Email: </label>
         <input type="email" id="email" th:field="*{email}" /><br>
 
+        <!-- Multifield for Subject -->
+        <div id="subjectContainer">
+            <div th:each="subject, iterStat : ${selectedUser.subjects}">
+                <label th:for="'subject' + ${iterStat.index}">Subject (#{iterStat.index + 1}): </label>
+                <input type="text" th:id="'subject' + ${iterStat.index}" th:field="*{subjects[__${iterStat.index}__]}" /><br>
+            </div>
+        </div>
+        <button type="button" onclick="addField('subjectContainer')">Add Subject</button><br>
+
         <button type="submit">Update</button>
     </form>
 </div>
+
+<script>
+    function addField(containerId) {
+        const container = document.getElementById(containerId);
+        const index = container.children.length; // Calculate the index for the new field
+        const newField = document.createElement('div');
+        newField.innerHTML = '<label for="subject' + index + '">Subject (' + (index + 1) + '): </label>' +
+            '<input type="text" id="subject' + index + '" name="subjects[' + index + ']" /><br>';
+        container.appendChild(newField);
+    }
+</script>
 
 </body>
 </html>
