@@ -9,6 +9,9 @@
         .field-container button {
             margin-left: 10px;
         }
+        .toggle-panel {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -18,7 +21,11 @@
     <label for="siteSelect">Select Site Name:</label>
     <select id="siteSelect" name="siteName" th:onchange="this.form.submit()">
         <option value="" disabled selected>Select a site</option>
-        <option th:each="site : ${siteConfigs}" th:value="${site.siteName}" th:text="${site.siteName}" th:selected="${site.siteName == selectedSiteConfig?.siteName}"></option>
+        <option th:each="site : ${siteConfigs}"
+                th:value="${site.siteName}"
+                th:text="${site.siteName}"
+                th:selected="${site.siteName == selectedSiteConfig?.siteName}">
+        </option>
     </select>
 </form>
 
@@ -152,6 +159,15 @@
 </div>
 
 <script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
+            var panelId = checkbox.getAttribute("onclick").split("'")[1];
+            togglePanel(checkbox, panelId);
+        });
+    });
+
     function addField(containerId, fieldName, isDropdown) {
         var container = document.getElementById(containerId);
         var index = container.children.length;
@@ -189,6 +205,18 @@
             panel.style.display = 'none';
         }
     }
+    function initializePanels() {
+        var commonCacheCheck = document.getElementById("commonCacheCheck");
+        togglePanel(commonCacheCheck, "commonCachePanel");
+
+        var siteSpCacheCheck = document.getElementById("siteSpCacheCheck");
+        togglePanel(siteSpCacheCheck, "siteSpCachePanel");
+    }
+
+    // Run the initializePanels function after the page content is loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        initializePanels();
+    });
 </script>
 
 </body>
