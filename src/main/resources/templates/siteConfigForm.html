@@ -65,6 +65,13 @@
                     <button type="button" onclick="removeField(this, 'damTransformPathContainer')">Remove</button><br>
                 </div>
             </div>
+            <div th:if="${selectedSiteConfig.damTransformPath.size() == 0}">
+                <div class="field-container" id="damTransformPathField-0">
+                    <label for="damTransformPath0">DAM Transform Path (1): </label>
+                    <input type="text" id="damTransformPath0" name="damTransformPath[0]" />
+                    <button type="button" onclick="removeField(this, 'damTransformPathContainer')">Remove</button><br>
+                </div>
+            </div>
         </div>
         <button type="button" onclick="addField('damTransformPathContainer', 'damTransformPath', false)">Add DAM Transform Path</button><br>
 
@@ -75,9 +82,22 @@
                     <label th:for="'languages' + ${iterStat.index}">Language (#{iterStat.index + 1}): </label>
                     <select th:id="'languages' + ${iterStat.index}" th:field="*{languages[__${iterStat.index}__]}">
                         <option value="" disabled>Select Language</option>
-                        <option value="EN">English</option>
-                        <option value="ES">Spanish</option>
-                        <option value="FR">French</option>
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <!-- Add more languages as needed -->
+                    </select>
+                    <button type="button" onclick="removeField(this, 'languagesContainer')">Remove</button><br>
+                </div>
+            </div>
+            <div th:if="${selectedSiteConfig.languages.size() == 0}">
+                <div class="field-container" id="languagesField-0">
+                    <label for="languages0">Language (1): </label>
+                    <select id="languages0" name="languages[0]">
+                        <option value="" disabled>Select Language</option>
+                        <option value="es">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
                         <!-- Add more languages as needed -->
                     </select>
                     <button type="button" onclick="removeField(this, 'languagesContainer')">Remove</button><br>
@@ -108,9 +128,8 @@
                         <label th:for="'commonDropdown' + ${iterStat.index}">Common Dropdown (#{iterStat.index + 1}): </label>
                         <select th:id="'commonDropdown' + ${iterStat.index}" th:field="*{commonDropdown[__${iterStat.index}__]}">
                             <option value="" disabled>Select Option</option>
-                            <option value="Option1">Option 1</option>
-                            <option value="Option2">Option 2</option>
-                            <option value="Option3">Option 3</option>
+                            <option value="allow">Allow</option>
+                            <option value="deny">Deny</option>
                             <!-- Add more options as needed -->
                         </select>
                         <button type="button" onclick="removeField(this, 'commonDropdownContainer')">Remove</button><br>
@@ -142,9 +161,8 @@
                         <label th:for="'siteSpDropdown' + ${iterStat.index}">Site SP Dropdown (#{iterStat.index + 1}): </label>
                         <select th:id="'siteSpDropdown' + ${iterStat.index}" th:field="*{siteSpDropdown[__${iterStat.index}__]}">
                             <option value="" disabled>Select Option</option>
-                            <option value="Option1">Option 1</option>
-                            <option value="Option2">Option 2</option>
-                            <option value="Option3">Option 3</option>
+                            <option value="allow">Allow</option>
+                            <option value="deny">Deny</option>
                             <!-- Add more options as needed -->
                         </select>
                         <button type="button" onclick="removeField(this, 'siteSpDropdownContainer')">Remove</button><br>
@@ -178,9 +196,8 @@
             newField.innerHTML = '<label for="' + fieldName + index + '">' + fieldName + ' (' + (index + 1) + '): </label>' +
                 '<select id="' + fieldName + index + '" name="' + fieldName + '[' + index + ']">' +
                 '<option value="" disabled>Select Option</option>' +
-                '<option value="Option1">Option 1</option>' +
-                '<option value="Option2">Option 2</option>' +
-                '<option value="Option3">Option 3</option>' +
+                '<option value="allow">Allow</option>' +
+                '<option value="deny">Deny</option>' +
                 '</select>' +
                 '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>';
         } else {

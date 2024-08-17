@@ -1,5 +1,7 @@
 package com.formapp.formupdate.entity;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,7 +30,7 @@ public class SiteConfig {
     @ElementCollection
     @CollectionTable(name = "dam_transform_path", joinColumns = @JoinColumn(name = "site_name"))
     @Column(name = "path")
-    private List<String> damTransformPath;
+    private List<String> damTransformPath = new ArrayList<>();
 
     @Column(name = "state_specific_page")
     private String stateSpecificPage;
@@ -39,7 +41,7 @@ public class SiteConfig {
     @ElementCollection
     @CollectionTable(name = "languages", joinColumns = @JoinColumn(name = "site_name"))
     @Column(name = "language")
-    private List<String> languages;
+    private List<String> languages = new ArrayList<>();
 
     @Column(name = "common_cache_check")
     private String commonCacheCheck;
@@ -47,12 +49,12 @@ public class SiteConfig {
     @ElementCollection
     @CollectionTable(name = "common_cache_path", joinColumns = @JoinColumn(name = "site_name"))
     @Column(name = "path")
-    private List<String> commonCachePath;
+    private List<String> commonCachePath = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "common_dropdown", joinColumns = @JoinColumn(name = "site_name"))
     @Column(name = "dropdown")
-    private List<String> commonDropdown;
+    private List<String> commonDropdown = new ArrayList<>();
 
     @Column(name = "site_sp_cache_check")
     private String siteSpCacheCheck;
@@ -60,12 +62,12 @@ public class SiteConfig {
     @ElementCollection
     @CollectionTable(name = "site_sp_cache_path", joinColumns = @JoinColumn(name = "site_name"))
     @Column(name = "path")
-    private List<String> siteSpCachePath;
+    private List<String> siteSpCachePath = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "site_sp_dropdown", joinColumns = @JoinColumn(name = "site_name"))
     @Column(name = "dropdown")
-    private List<String> siteSpDropdown;
+    private List<String> siteSpDropdown = new ArrayList<>();
 
     // Getters and Setters
 

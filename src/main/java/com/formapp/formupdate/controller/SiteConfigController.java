@@ -169,5 +169,11 @@ public class SiteConfigController {
         siteConfigService.save(siteConfig);
         return "redirect:/site-configs";
     }
+
+    @GetMapping("/site-configs/dispatcher-etc/get-all")
+    @ResponseBody
+    public List<SiteConfig> getAllDispatcherEtc(){
+        return siteConfigService.getAllSiteConfigs();
+    }
 }
 

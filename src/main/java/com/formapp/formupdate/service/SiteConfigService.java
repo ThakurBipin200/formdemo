@@ -63,4 +63,16 @@ public class SiteConfigService {
     public void deleteBySiteName(String siteName) {
         siteConfigRepository.deleteById(siteName);
     }
+
+    public List<SiteConfig> getAllSiteConfigs() {
+        return siteConfigRepository.findAll();
+    }
+
+    public SiteConfig saveSiteConfig(SiteConfig siteConfig) {
+        return siteConfigRepository.save(siteConfig);
+    }
+
+    public void deleteSiteConfig(String siteName) {
+        siteConfigRepository.deleteById(siteName);
+    }
 }
