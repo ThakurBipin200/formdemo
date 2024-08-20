@@ -57,86 +57,76 @@
         <input type="text" id="siteMapFeedSelector" th:field="*{siteMapFeedSelector}" /><br>
 
         <!-- Multifield for DAM Transform Path -->
+        <!-- DAM Transform Path Field -->
         <div id="damTransformPathContainer">
-            <div th:each="path, iterStat : ${selectedSiteConfig.damTransformPath}">
+            <!-- Check if there is at least one item in the collection -->
+            <div th:if="${selectedSiteConfig.damTransformPath != null and selectedSiteConfig.damTransformPath.size() > 0}">
+                <div class="field-container" id="damTransformPathField-0">
+                    <label for="damTransformPath0">DAM Transform Path (1): </label>
+                    <input type="text" id="damTransformPath0" name="damTransformPath[0]" th:value="${selectedSiteConfig.damTransformPath[0]}" required />
+                </div>
+            </div>
+            <!-- Render additional fields if there are more items -->
+            <div th:each="path, iterStat : ${selectedSiteConfig.damTransformPath}" th:if="${iterStat.index > 0}">
                 <div class="field-container" id="damTransformPathField-[[${iterStat.index}]]">
                     <label th:for="'damTransformPath' + ${iterStat.index}">DAM Transform Path (#{iterStat.index + 1}): </label>
                     <input type="text" th:id="'damTransformPath' + ${iterStat.index}" th:field="*{damTransformPath[__${iterStat.index}__]}" />
                     <button type="button" onclick="removeField(this, 'damTransformPathContainer')">Remove</button><br>
                 </div>
             </div>
-            <div th:if="${selectedSiteConfig.damTransformPath.size() == 0}">
-                <div class="field-container" id="damTransformPathField-0">
-                    <label for="damTransformPath0">DAM Transform Path (1): </label>
-                    <input type="text" id="damTransformPath0" name="damTransformPath[0]" />
-                    <button type="button" onclick="removeField(this, 'damTransformPathContainer')">Remove</button><br>
+        </div>
+        <button type="button" onclick="addFieldDamPath('damTransformPathContainer', 'damTransformPath')">Add DAM Transform Path</button><br>
+
+        <!-- Languages Field -->
+        <div id="languagesContainer">
+            <!-- Check if there is at least one item in the collection -->
+            <div th:if="${selectedSiteConfig.languages != null and selectedSiteConfig.languages.size() > 0}">
+                <div class="field-container" id="languagesField-0">
+                    <label for="languages0">Language (1): </label>
+                    <select id="languages0" name="languages[0]" th:value="${selectedSiteConfig.languages[0]}" required>
+                        <option value="" disabled>Select Language</option>
+                        <option value="en" th:selected="${selectedSiteConfig.languages[0] == 'en'}">English</option>
+                        <option value="es" th:selected="${selectedSiteConfig.languages[0] == 'es'}">Spanish</option>
+                        <option value="fr" th:selected="${selectedSiteConfig.languages[0] == 'fr'}">French</option>
+                    </select>
                 </div>
             </div>
-        </div>
-        <button type="button" onclick="addField('damTransformPathContainer', 'damTransformPath', false)">Add DAM Transform Path</button><br>
-
-        <!-- Multifield Dropdown for Languages -->
-        <div id="languagesContainer">
-            <div th:each="lang, iterStat : ${selectedSiteConfig.languages}">
+            <!-- Render additional fields if there are more items -->
+            <div th:each="lang, iterStat : ${selectedSiteConfig.languages}" th:if="${iterStat.index > 0}">
                 <div class="field-container" id="languagesField-[[${iterStat.index}]]">
                     <label th:for="'languages' + ${iterStat.index}">Language (#{iterStat.index + 1}): </label>
                     <select th:id="'languages' + ${iterStat.index}" th:field="*{languages[__${iterStat.index}__]}">
                         <option value="" disabled>Select Language</option>
-                        <option value="en">English</option>
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                        <!-- Add more languages as needed -->
-                    </select>
-                    <button type="button" onclick="removeField(this, 'languagesContainer')">Remove</button><br>
-                </div>
-            </div>
-            <div th:if="${selectedSiteConfig.languages.size() == 0}">
-                <div class="field-container" id="languagesField-0">
-                    <label for="languages0">Language (1): </label>
-                    <select id="languages0" name="languages[0]">
-                        <option value="" disabled>Select Language</option>
-                        <option value="es">English</option>
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                        <!-- Add more languages as needed -->
+                        <option value="en" th:selected="${lang == 'en'}">English</option>
+                        <option value="es" th:selected="${lang == 'es'}">Spanish</option>
+                        <option value="fr" th:selected="${lang == 'fr'}">French</option>
                     </select>
                     <button type="button" onclick="removeField(this, 'languagesContainer')">Remove</button><br>
                 </div>
             </div>
         </div>
-        <button type="button" onclick="addField('languagesContainer', 'languages', true)">Add Language</button><br>
-
+        <button type="button" onclick="addFieldLanguages('languagesContainer', 'languages')">Add Language</button><br>
         <!-- Conditional Fields Based on Cache Check -->
         <label for="commonCacheCheck">Common Cache Check: </label>
         <input type="checkbox" value="on" id="commonCacheCheck" th:field="*{commonCacheCheck}" th:checked="*{commonCacheCheck}" onclick="togglePanel(this,'commonCachePanel')" /><br>
 
         <div id="commonCachePanel" style="display: none;">
-            <div id="commonCachePathContainer">
+            <div id="commonCacheFieldContainer">
                 <div th:each="path, iterStat : ${selectedSiteConfig.commonCachePath}">
-                    <div class="field-container" id="commonCachePathField-[[${iterStat.index}]]">
+                    <div class="field-container" id="commonCacheField-[[${iterStat.index}]]">
                         <label th:for="'commonCachePath' + ${iterStat.index}">Common Cache Path (#{iterStat.index + 1}): </label>
                         <input type="text" th:id="'commonCachePath' + ${iterStat.index}" th:field="*{commonCachePath[__${iterStat.index}__]}" />
-                        <button type="button" onclick="removeField(this, 'commonCachePathContainer')">Remove</button><br>
-                    </div>
-                </div>
-            </div>
-            <button type="button" onclick="addField('commonCachePathContainer', 'commonCachePath', false)">Add Common Cache Path</button><br>
-
-            <div id="commonDropdownContainer">
-                <div th:each="dropdown, iterStat : ${selectedSiteConfig.commonDropdown}">
-                    <div class="field-container" id="commonDropdownField-[[${iterStat.index}]]">
                         <label th:for="'commonDropdown' + ${iterStat.index}">Common Dropdown (#{iterStat.index + 1}): </label>
                         <select th:id="'commonDropdown' + ${iterStat.index}" th:field="*{commonDropdown[__${iterStat.index}__]}">
                             <option value="" disabled>Select Option</option>
                             <option value="allow">Allow</option>
                             <option value="deny">Deny</option>
-                            <!-- Add more options as needed -->
                         </select>
-                        <button type="button" onclick="removeField(this, 'commonDropdownContainer')">Remove</button><br>
+                        <button type="button" onclick="removeField(this, 'commonCacheFieldContainer')">Remove</button><br>
                     </div>
                 </div>
             </div>
-            <button type="button" onclick="addField('commonDropdownContainer', 'commonDropdown', true)">Add Common Dropdown</button><br>
+            <button type="button" onclick="addField('commonCacheFieldContainer', 'commonCachePath', 'commonDropdown')">Add Common Cache Path & Dropdown</button><br>
         </div>
 
         <!-- Site Specific Cache Check -->
@@ -144,32 +134,22 @@
         <input th:checked="*{siteSpCacheCheck}" type="checkbox" value="on" id="siteSpCacheCheck" th:field="*{siteSpCacheCheck}" onclick="togglePanel(this,'siteSpCachePanel')" /><br>
 
         <div id="siteSpCachePanel" style="display: none;">
-            <div id="siteSpCachePathContainer">
+            <div id="siteSpCacheFieldContainer">
                 <div th:each="path, iterStat : ${selectedSiteConfig.siteSpCachePath}">
-                    <div class="field-container" id="siteSpCachePathField-[[${iterStat.index}]]">
+                    <div class="field-container" id="siteSpCacheField-[[${iterStat.index}]]">
                         <label th:for="'siteSpCachePath' + ${iterStat.index}">Site SP Cache Path (#{iterStat.index + 1}): </label>
                         <input type="text" th:id="'siteSpCachePath' + ${iterStat.index}" th:field="*{siteSpCachePath[__${iterStat.index}__]}" />
-                        <button type="button" onclick="removeField(this, 'siteSpCachePathContainer')">Remove</button><br>
-                    </div>
-                </div>
-            </div>
-            <button type="button" onclick="addField('siteSpCachePathContainer', 'siteSpCachePath', false)">Add Site SP Cache Path</button><br>
-
-            <div id="siteSpDropdownContainer">
-                <div th:each="dropdown, iterStat : ${selectedSiteConfig.siteSpDropdown}">
-                    <div class="field-container" id="siteSpDropdownField-[[${iterStat.index}]]">
                         <label th:for="'siteSpDropdown' + ${iterStat.index}">Site SP Dropdown (#{iterStat.index + 1}): </label>
                         <select th:id="'siteSpDropdown' + ${iterStat.index}" th:field="*{siteSpDropdown[__${iterStat.index}__]}">
                             <option value="" disabled>Select Option</option>
                             <option value="allow">Allow</option>
                             <option value="deny">Deny</option>
-                            <!-- Add more options as needed -->
                         </select>
-                        <button type="button" onclick="removeField(this, 'siteSpDropdownContainer')">Remove</button><br>
+                        <button type="button" onclick="removeField(this, 'siteSpCacheFieldContainer')">Remove</button><br>
                     </div>
                 </div>
             </div>
-            <button type="button" onclick="addField('siteSpDropdownContainer', 'siteSpDropdown', true)">Add Site SP Dropdown</button><br>
+            <button type="button" onclick="addField('siteSpCacheFieldContainer', 'siteSpCachePath', 'siteSpDropdown')">Add Site SP Cache Path & Dropdown</button><br>
         </div>
 
         <button type="submit">Update</button>
@@ -177,7 +157,6 @@
 </div>
 
 <script>
-
     document.addEventListener("DOMContentLoaded", function() {
         var checkboxes = document.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(function(checkbox) {
@@ -186,33 +165,59 @@
         });
     });
 
-    function addField(containerId, fieldName, isDropdown) {
+    function addFieldLanguages(containerId, fieldName) {
+        var container = document.getElementById(containerId);
+        var index = container.children.length;
+        var newField = document.createElement('div');
+        newField.className = 'field-container';
+        newField.innerHTML = '<label for="' + fieldName + index + '">' + fieldName + ' (' + (index + 1) + '): </label>' +
+            '<select id="' + fieldName + index + '" name="' + fieldName + '[' + index + ']">' +
+            '<option value="" disabled>Select Language</option>' +
+            '<option value="en">English</option>' +
+            '<option value="es">Spanish</option>' +
+            '<option value="fr">French</option>' +
+            '</select>' +
+            (index > 0 ? '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>' : '');
+        container.appendChild(newField);
+    }
+
+    function addFieldDamPath(containerId, fieldName) {
+        var container = document.getElementById(containerId);
+        var index = container.children.length;
+        var newField = document.createElement('div');
+        newField.className = 'field-container';
+        newField.innerHTML = '<label for="' + fieldName + index + '">' + fieldName + ' (' + (index + 1) + '): </label>' +
+            '<input type="text" id="' + fieldName + index + '" name="' + fieldName + '[' + index + ']" />' +
+            (index > 0 ? '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>' : '');
+        container.appendChild(newField);
+    }
+
+    function removeField(button, containerId) {
+        button.parentElement.remove();
+    }
+
+    function addField(containerId, pathFieldName, dropdownFieldName) {
         var container = document.getElementById(containerId);
         var index = container.children.length;
         var newField = document.createElement('div');
         newField.className = 'field-container';
 
-        if (isDropdown) {
-            newField.innerHTML = '<label for="' + fieldName + index + '">' + fieldName + ' (' + (index + 1) + '): </label>' +
-                '<select id="' + fieldName + index + '" name="' + fieldName + '[' + index + ']">' +
-                '<option value="" disabled>Select Option</option>' +
-                '<option value="allow">Allow</option>' +
-                '<option value="deny">Deny</option>' +
-                '</select>' +
-                '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>';
-        } else {
-            newField.innerHTML = '<label for="' + fieldName + index + '">' + fieldName + ' (' + (index + 1) + '): </label>' +
-                '<input type="text" id="' + fieldName + index + '" name="' + fieldName + '[' + index + ']" />' +
-                '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>';
-        }
+        newField.innerHTML = '<label for="' + pathFieldName + index + '">' + pathFieldName + ' (' + (index + 1) + '): </label>' +
+            '<input type="text" id="' + pathFieldName + index + '" name="' + pathFieldName + '[' + index + ']" />' +
+            '<label for="' + dropdownFieldName + index + '">' + dropdownFieldName + ' (' + (index + 1) + '): </label>' +
+            '<select id="' + dropdownFieldName + index + '" name="' + dropdownFieldName + '[' + index + ']">' +
+            '<option value="" disabled>Select Option</option>' +
+            '<option value="allow">Allow</option>' +
+            '<option value="deny">Deny</option>' +
+            '</select>' +
+            '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>';
 
         container.appendChild(newField);
     }
 
-    function removeField(button, containerId) {
-        var container = document.getElementById(containerId);
-        button.parentElement.remove();
-    }
+    // function removeField(button, containerId) {
+    //     button.parentElement.remove();
+    // }
 
     function togglePanel(checkbox, panelId) {
         var panel = document.getElementById(panelId);
