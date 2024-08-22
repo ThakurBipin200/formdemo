@@ -75,4 +75,7 @@ public class SiteConfigService {
     public void deleteSiteConfig(String siteName) {
         siteConfigRepository.deleteById(siteName);
     }
+    public boolean existsBySiteName(String siteName) {
+        return siteConfigRepository.existsBySiteName(siteName);
+    }
 }

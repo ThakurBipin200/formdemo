@@ -175,5 +175,25 @@ public class SiteConfigController {
     public List<SiteConfig> getAllDispatcherEtc(){
         return siteConfigService.getAllSiteConfigs();
     }
+
+    @GetMapping("save/data")
+    public String saveFormPage(Model model){
+        List<SiteConfig> siteConfigs = siteConfigService.findAll();
+        model.addAttribute("newSiteConfig", new SiteConfig());
+        model.addAttribute("selectedSiteConfig", new SiteConfig());
+        return "saveForm";
+    }
+    @PostMapping("/site-configs/sameform")
+    public String saveFormData(SiteConfig siteConfig) {
+        siteConfigService.save(siteConfig);
+        return "redirect:/site-configs";
+    }
+
+    @PostMapping("/site-configs/check-site-name")
+    @ResponseBody
+    public boolean checkSiteName(@RequestParam("siteName") String siteName) {
+        return siteConfigService.existsBySiteName(siteName);
+    }
+
 }
 

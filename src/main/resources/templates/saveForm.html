@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Site Config Form</title>
+    <style>
+        .field-container {
+            margin-bottom: 10px;
+        }
+        .field-container button {
+            margin-left: 10px;
+        }
+        .toggle-panel {
+            display: none;
+        }
+        .field-container {
+            margin-bottom: 10px;
+        }
+        .warning {
+            color: red;
+            font-size: small;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Create New Site Configuration</h2>
+<form th:action="@{/site-configs/sameform}" th:object="${newSiteConfig}" method="post">
+
+    <!-- New Site Name Field -->
+    <div class="field-container">
+        <label for="siteName">Site Name: </label>
+        <input type="text" id="siteName" name="siteName" required />
+        <span id="siteNameWarning" class="warning" style="display:none;">Site name already exists!</span>
+    </div>
+
+    <label for="headerVhost">Header VHost: </label>
+    <input type="text" id="headerVhost" th:field="*{headerVhost}" /><br>
+
+    <label for="siteProdDomain">Site Prod Domain: </label>
+    <input type="text" id="siteProdDomain" th:field="*{siteProdDomain}" /><br>
+
+    <label for="siteNonProdDomain">Site Non Prod Domain: </label>
+    <input type="text" id="siteNonProdDomain" th:field="*{siteNonProdDomain}" /><br>
+
+    <label for="aemSitePathEN">AEM Site Path EN: </label>
+    <input type="text" id="aemSitePathEN" th:field="*{aemSitePathEN}" /><br>
+
+    <label for="statFilesLevel">Stat Files Level: </label>
+    <input type="text" id="statFilesLevel" th:field="*{statFilesLevel}" /><br>
+
+    <!-- New Fields -->
+    <label for="stateSpecificPage">State Specific Page: </label>
+    <input type="checkbox" value="on" id="stateSpecificPage" th:field="*{stateSpecificPage}" th:checked="*{stateSpecificPage}" /><br>
+
+    <label for="siteMapFeedSelector">Site Map Feed Selector: </label>
+    <input type="text" id="siteMapFeedSelector" th:field="*{siteMapFeedSelector}" /><br>
+
+    <!-- Multifield for DAM Transform Path -->
+    <div id="damTransformPathContainer">
+        <div class="field-container" id="damTransformPathField-0">
+            <label for="damTransformPath0">DAM Transform Path (1): </label>
+            <input type="text" id="damTransformPath0" name="damTransformPath[0]" required />
+        </div>
+    </div>
+    <button type="button" onclick="addFieldDamPath('damTransformPathContainer', 'damTransformPath')">Add DAM Transform Path</button><br>
+
+    <!-- Languages Field -->
+    <div id="languagesContainer">
+        <div class="field-container" id="languagesField-0">
+            <label for="languages0">Language (1): </label>
+            <select id="languages0" name="languages[0]" required>
+                <option value="" disabled selected>Select Language</option>
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+            </select>
+        </div>
+    </div>
+    <button type="button" onclick="addFieldLanguages('languagesContainer', 'languages')">Add Language</button><br>
+
+    <!-- Conditional Fields Based on Cache Check -->
+    <label for="commonCacheCheck">Common Cache Check: </label>
+    <input type="checkbox" value="on" id="commonCacheCheck" th:field="*{commonCacheCheck}" th:checked="*{commonCacheCheck}" onclick="togglePanel(this,'commonCachePanel')" /><br>
+
+    <div id="commonCachePanel" style="display: none;">
+        <div id="commonCacheFieldContainer">
+            <div class="field-container" id="commonCacheField-0">
+                <label for="commonCachePath0">Common Cache Path (1): </label>
+                <input type="text" id="commonCachePath0" name="commonCachePath[0]" />
+                <label for="commonDropdown0">Common Dropdown (1): </label>
+                <select id="commonDropdown0" name="commonDropdown[0]">
+                    <option value="" disabled selected>Select Option</option>
+                    <option value="allow">Allow</option>
+                    <option value="deny">Deny</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" onclick="addField('commonCacheFieldContainer', 'commonCachePath', 'commonDropdown')">Add Common Cache Path & Dropdown</button><br>
+    </div>
+
+    <!-- Site Specific Cache Check -->
+    <label for="siteSpCacheCheck">Site SP Cache Check: </label>
+    <input type="checkbox" value="on" id="siteSpCacheCheck" th:field="*{siteSpCacheCheck}" onclick="togglePanel(this,'siteSpCachePanel')" /><br>
+
+    <div id="siteSpCachePanel" style="display: none;">
+        <div id="siteSpCacheFieldContainer">
+            <div class="field-container" id="siteSpCacheField-0">
+                <label for="siteSpCachePath0">Site SP Cache Path (1): </label>
+                <input type="text" id="siteSpCachePath0" name="siteSpCachePath[0]" />
+                <label for="siteSpDropdown0">Site SP Dropdown (1): </label>
+                <select id="siteSpDropdown0" name="siteSpDropdown[0]">
+                    <option value="" disabled selected>Select Option</option>
+                    <option value="allow">Allow</option>
+                    <option value="deny">Deny</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" onclick="addField('siteSpCacheFieldContainer', 'siteSpCachePath', 'siteSpDropdown')">Add Site SP Cache Path & Dropdown</button><br>
+    </div>
+
+    <button type="submit">Save Site Config</button>
+</form>
+
+<script>
+    function addFieldLanguages(containerId, fieldName) {
+        var container = document.getElementById(containerId);
+        var index = container.children.length;
+        var newField = document.createElement('div');
+        newField.className = 'field-container';
+        newField.innerHTML = '<label for="' + fieldName + index + '">' + fieldName + ' (' + (index + 1) + '): </label>' +
+            '<select id="' + fieldName + index + '" name="' + fieldName + '[' + index + ']">' +
+            '<option value="" disabled>Select Language</option>' +
+            '<option value="en">English</option>' +
+            '<option value="es">Spanish</option>' +
+            '<option value="fr">French</option>' +
+            '</select>' +
+            (index > 0 ? '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>' : '');
+        container.appendChild(newField);
+    }
+
+    function addFieldDamPath(containerId, fieldName) {
+        var container = document.getElementById(containerId);
+        var index = container.children.length;
+        var newField = document.createElement('div');
+        newField.className = 'field-container';
+        newField.innerHTML = '<label for="' + fieldName + index + '">' + fieldName + ' (' + (index + 1) + '): </label>' +
+            '<input type="text" id="' + fieldName + index + '" name="' + fieldName + '[' + index + ']" />' +
+            (index > 0 ? '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>' : '');
+        container.appendChild(newField);
+    }
+
+    function removeField(button, containerId) {
+        button.parentElement.remove();
+    }
+
+    function addField(containerId, pathFieldName, dropdownFieldName) {
+        var container = document.getElementById(containerId);
+        var index = container.children.length;
+        var newField = document.createElement('div');
+        newField.className = 'field-container';
+
+        newField.innerHTML = '<label for="' + pathFieldName + index + '">' + pathFieldName + ' (' + (index + 1) + '): </label>' +
+            '<input type="text" id="' + pathFieldName + index + '" name="' + pathFieldName + '[' + index + ']" />' +
+            '<label for="' + dropdownFieldName + index + '">' + dropdownFieldName + ' (' + (index + 1) + '): </label>' +
+            '<select id="' + dropdownFieldName + index + '" name="' + dropdownFieldName + '[' + index + ']">' +
+            '<option value="" disabled>Select Option</option>' +
+            '<option value="allow">Allow</option>' +
+            '<option value="deny">Deny</option>' +
+            '</select>' +
+            '<button type="button" onclick="removeField(this, \'' + containerId + '\')">Remove</button>';
+
+        container.appendChild(newField);
+    }
+
+    function togglePanel(checkbox, panelId) {
+        var panel = document.getElementById(panelId);
+        if (checkbox.checked) {
+            panel.style.display = 'block';
+        } else {
+            panel.style.display = 'none';
+        }
+    }
+
+    function initializePanels() {
+        togglePanel(document.getElementById('commonCacheCheck'), 'commonCachePanel');
+        togglePanel(document.getElementById('siteSpCacheCheck'), 'siteSpCachePanel');
+    }
+
+    window.onload = initializePanels;
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#siteName').on('blur', function() {
+            var siteName = $(this).val();
+            if (siteName) {
+                $.ajax({
+                    url: '/site-configs/check-site-name',
+                    type: 'POST',
+                    data: { siteName: siteName },
+                    success: function(exists) {
+                        if (exists) {
+                            $('#siteNameWarning').show();
+                        } else {
+                            $('#siteNameWarning').hide();
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#siteConfigForm').on('submit', function(e) {
+            if ($('#siteNameWarning').is(':visible')) {
+                e.preventDefault(); // Prevent form submission if site name exists
+                alert('Please choose a different site name.');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
