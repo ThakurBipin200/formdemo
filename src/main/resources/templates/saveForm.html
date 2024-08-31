@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Site Config Form</title>
     <style>
@@ -19,13 +19,49 @@
             color: red;
             font-size: small;
         }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
 <h2>Create New Site Configuration</h2>
-<form th:action="@{/site-configs/sameform}" th:object="${newSiteConfig}" method="post">
+<form id="siteConfigForm" th:action="@{/site-configs/sameform}" th:object="${newSiteConfig}" method="post">
 
     <!-- New Site Name Field -->
     <div class="field-container">
@@ -122,6 +158,14 @@
     <button type="submit">Save Site Config</button>
 </form>
 
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Form submitted successfully!</p>
+        <p><a href="/your-link-url">Click here to view the details</a></p>
+    </div>
+</div>
+
 <script>
     function addFieldLanguages(containerId, fieldName) {
         var container = document.getElementById(containerId);
@@ -210,10 +254,40 @@
             }
         });
 
-        $('#siteConfigForm').on('submit', function(e) {
+        // AJAX form submission
+        $('form').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
             if ($('#siteNameWarning').is(':visible')) {
-                e.preventDefault(); // Prevent form submission if site name exists
                 alert('Please choose a different site name.');
+                return;
+            }
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    // Show the custom modal on success
+                    $('#successModal').show();
+                },
+                error: function() {
+                    alert('There was an error submitting the form.');
+                }
+            });
+        });
+
+        // Close the modal when the user clicks on <span> (x)
+        $('.close').on('click', function() {
+            $('#successModal').hide();
+        });
+
+        // Close the modal when the user clicks anywhere outside of the modal
+        $(window).on('click', function(event) {
+            if (event.target.id === 'successModal') {
+                $('#successModal').hide();
             }
         });
     });
