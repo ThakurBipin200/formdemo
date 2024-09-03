@@ -42,4 +42,18 @@ public class UserController {
         userService.saveUser(user);
         return "redirect:/users";
     }
+
+    @GetMapping("ckeditor")
+    public String ckeditor(){
+        return "ckEditor";
+    }
+
+    @PostMapping("/submitForm")
+    public String submitForm(@RequestParam("content") String content, Model model) {
+        // Process the content (e.g., save to the database)
+        model.addAttribute("content", content);
+        return "result"; // Return to a result page or handle the data further
+    }
+
+
 }
